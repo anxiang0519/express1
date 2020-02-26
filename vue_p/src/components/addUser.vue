@@ -1,15 +1,30 @@
 <template>
   <div>
-    <div class="demo-input-suffix">
-      姓名
-      <el-input placeholder="name" v-model="name">
-      </el-input>
-    </div>
-    <div class="demo-input-suffix">
-      年龄
-      <el-input placeholder="age" v-model="age">
-      </el-input>
-    </div>
+    <el-row type="flex" justify="center">
+      <el-col :span="6">
+        姓名
+      </el-col>
+      <el-col :span="6">
+          <el-input placeholder="name" v-model="name"></el-input>
+      </el-col>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <el-col :span="6">
+        年龄
+      </el-col>
+      <el-col :span="6">
+          <el-input placeholder="age" v-model="age"></el-input>
+      </el-col>
+    </el-row>
+     <el-row type="flex" justify="center">
+      <el-col :span="6">
+        电话
+      </el-col>
+      <el-col :span="6">
+          <el-input placeholder="phone" v-model="phone"></el-input>
+      </el-col>
+    </el-row>
+    <el-button @click="save()">保存</el-button>
   </div>
 </template>
 
@@ -21,17 +36,18 @@ export default {
     return {
       title:'',
       name:'',
-      age:0
+      age:0,
+      phone:''
     }
   },
   methods:{
-    save(row){
+    save(){
       var _this = this;
       http({
         //这里是你自己的请求方式、url和data参数
-        method: 'get',
-        url: 'http://localhost:3000/addUser?id='+row.id,
-        data: {}
+        method: 'post',
+        url: 'http://localhost:3000/addUser',
+        data: {'name':_this.name,'age':_this.age,'phone':_this.phone}
       }).then(res => {
         if(res.code==200){
           this.$message({
@@ -46,21 +62,6 @@ export default {
         }); 
       });
     }
-  },
-  mounted(){
-    var _this = this;
-    http({
-      //这里是你自己的请求方式、url和data参数
-      method: 'get',
-      url: 'http://localhost:3000/query?id'+1,
-      data: {}
-    }).then(function (res) {
-      _this.title = '';
-      _this.name = res.data.name;
-      _this.age = res.data.age;
-    }).catch(function (err) {
-      console.log(err);
-    });
   }
 }
 </script>

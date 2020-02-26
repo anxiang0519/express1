@@ -21,9 +21,13 @@ var pool = mysql.createPool(poolextend({}, mysqlconfig));
 console.log(pool);
 var userData = {
     add: function(req, res, next) {
+        var param = req.body;
+        if (param.age == null || param.name == null||param.phone == null) {
+            json(res, undefined);
+            return;
+        }
         pool.getConnection(function(err, connection) {
-            var param = req.query || req.params;
-            connection.query(sql.insert, [param.id, param.name, param.age], function(err, result) {
+            connection.query(sql.insert, [param.id, param.name, param.age,param.phone], function(err, result) {
                 if (result) {
                     result = 'add'
                 }

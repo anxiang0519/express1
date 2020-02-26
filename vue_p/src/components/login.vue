@@ -1,5 +1,8 @@
 <template>
   <div class="login_page">
+    <div class="login_back">
+      <img src="{{imgsrc}}" alt="">
+    </div>
     <div class="login_content">
       <el-row type="flex" justify="center" class="login_user_row">
         <el-col :span="20">
@@ -41,7 +44,8 @@ export default {
   data(){
     return {
       username:'',
-      password:''
+      password:'',
+      imgsrc:'../assets/logo.png'
     }
   },
   methods:{

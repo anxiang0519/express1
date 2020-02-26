@@ -24,7 +24,7 @@
           <el-input placeholder="phone" v-model="phone"></el-input>
       </el-col>
     </el-row>
-    <el-button @click="save()">默认按钮</el-button>
+    <el-button @click="save()">保存</el-button>
   </div>
 </template>
 

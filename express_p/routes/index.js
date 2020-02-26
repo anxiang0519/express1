@@ -6,7 +6,7 @@ var user = require('../modules/handle');
 router.get('/', function(req, res, next) {
   user.queryAll(req, res, next);
 });
-router.get('/addUser', function(req, res, next) {
+router.post('/addUser', function(req, res, next) {
     user.add(req, res, next);
 });
 router.get('/queryAll', function(req, res, next) {
