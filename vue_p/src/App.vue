@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-      <el-header height="60px;">{{title}}</el-header>
-      <el-main>
-        <router-view />
-      </el-main>
+      <router-view />
   </div>
 </template>
 
@@ -29,12 +26,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-.el-header{
-  height: 60px;
-  line-height: 60px;
-}
-.el-main{
-  background: #EEF3F7;
 }
 </style>
