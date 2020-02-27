@@ -1,8 +1,7 @@
 <template>
   <div class="login_page">
-    <div class="login_back">
-      <img src="{{imgsrc}}" alt="">
-    </div>
+    <!-- <div class="login_back" :style="backStyle">
+    </div> -->
     <div class="login_content">
       <el-row type="flex" justify="center" class="login_user_row">
         <el-col :span="20">
@@ -21,10 +20,10 @@
       </el-row>
       <el-row type="flex" justify="center" class="login_btn_row">
         <el-col :span="6">
-          <el-link href="https://element.eleme.io" target="_blank">注册账号</el-link>
+          <el-link href="" target="_blank">注册账号</el-link>
         </el-col>
         <el-col :span="6">
-          <el-link href="https://element.eleme.io" target="_blank">忘记密码</el-link>
+          <el-link href="" target="_blank">忘记密码</el-link>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center">
@@ -39,13 +38,16 @@
 <script>
 import {setCookie,getCookie} from '@/cookie'
 import http from '@/http'
+import login_back from '@/assets/login_back.jpg'
 export default {
   name: 'login',
   data(){
     return {
       username:'',
       password:'',
-      imgsrc:'../assets/logo.png'
+      backStyle:{
+        background:`url(${login_back}) center center no-repeat`
+      }
     }
   },
   methods:{
@@ -98,11 +100,16 @@ export default {
 .login_content{
   width: 400px;
   height: 500px;
-  margin: 0 auto;
-  margin-top: 200px;
+  /* margin: 0 auto; */
+  /* margin-top: 200px; */
   background: #fff;
   box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.5);
   border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  margin-top: -200px;
+  left: 50%;
+  margin-left: -200px;
 }
 .login_user_row{
   padding-top: 50px;
@@ -115,5 +122,10 @@ export default {
 }
 .login_btn{
   width: 100%;
+}
+.login_back{
+  position: absolute;
+  width: 100%;
+  height:50%;
 }
 </style>
