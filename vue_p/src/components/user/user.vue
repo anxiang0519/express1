@@ -51,7 +51,7 @@
 import http from '@/http'
 import { setCookie,getCookie,delCookie } from '@/cookie'
 export default {
-  name: 'queryAll',
+  name: 'user',
   data(){
     return {
       title:'',
