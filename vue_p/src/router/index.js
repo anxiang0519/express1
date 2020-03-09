@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import login from '@/components/login'
 import home from '@/components/home'
 import index from '@/components/index'
-import queryAll from '@/components/user/queryAll'
+import user from '@/components/user/user'
+import product from '@/components/product/product'
 
 
 Vue.use(Router)
@@ -33,8 +34,13 @@ export default new Router({
           },
           {
             path: '/home/user',
-            name: 'userlist',
-            component: queryAll
+            name: 'user',
+            component: user
+          },
+          {
+            path: '/home/product',
+            name: 'product',
+            component: product
           }
       ]
     }
