@@ -1,6 +1,6 @@
 //sql.js
 // SQL语句封裝
-var user = {
+var order = {
     insert:'INSERT INTO table2(id, name, age ,phone) VALUES(?,?,?,?)',
     update:'UPDATE table2 SET name=?, age=?,phone=? WHERE id=?',
     delete: 'DELETE FROM table2 WHERE id=?',
@@ -9,4 +9,4 @@ var user = {
     login:'SELECT * FROM table1 WHERE username = ? and password= ?',
     register:'INSERT INTO table1(id, username, password ,1) VALUES(?,?,?)',
 };
-module.exports = user;
+module.exports = order;

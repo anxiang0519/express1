@@ -9,17 +9,16 @@
 // 引入mysql
 var mysql = require('mysql');
 // 引入mysql连接配置
-var mysqlconfig = require('../config/mysql');
+var mysqlconfig = require('../../config/mysql');
 // 引入连接池配置
-var poolextend = require('./poolextend');
+var poolextend = require('../poolextend');
 // 引入SQL模块
 var sql = require('./sql');
 // 引入json模块
-var json = require('./json');
+var json = require('../json');
 // 使用连接池，提升性能
 var pool = mysql.createPool(poolextend({}, mysqlconfig));
-console.log(pool);
-var userData = {
+var banner = {
     add: function(req, res, next) {
         var param = req.body;
         if (param.age == null || param.name == null||param.phone == null) {
@@ -104,50 +103,6 @@ var userData = {
                 connection.release();
             });
         });
-    },
-    login:function(req,res,next){
-        var param = req.body;
-        if (param.username == null || param.password == null) {
-            json(res, undefined);
-            return;
-        }
-        pool.getConnection(function(err, connection) {
-            connection.query(sql.checkpwd,[param.username, param.password], function(err, result) {
-                if (result != '') {
-                    var _result = result;
-                    result = {
-                        result: 'login',
-                        data: _result
-                    }
-                } else {
-                    result = undefined;
-                }
-                json(res, result);
-                connection.release();
-            });
-        });
-    },
-    register:function(req,res,next){
-        var param = req.body;
-        if (param.username == null || param.password == null) {
-            json(res, undefined);
-            return;
-        }
-        pool.getConnection(function(err, connection) {
-            connection.query(sql.reguster,[param.id,param.username, param.password], function(err, result) {
-                if (result != '') {
-                    var _result = result;
-                    result = {
-                        result: 'register',
-                        data: _result
-                    }
-                } else {
-                    result = undefined;
-                }
-                json(res, result);
-                connection.release();
-            });
-        });
     }
 };
-module.exports = userData;
+module.exports = banner;
