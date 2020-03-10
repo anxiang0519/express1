@@ -9,7 +9,6 @@ export default {
   name: 'App',
   data(){
     return {
-      'title':'人员列表'
     }
   }
 }

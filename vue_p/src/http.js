@@ -18,9 +18,9 @@ const http = options => {
     axios({
       method: newOptions.method,
       url: newOptions.url,
-      data: newOptions.data
+      data: newOptions.data,
       // ,
-      // headers: newOptions.headers
+      headers: newOptions.headers
     }).then(res => {
       //根据返回的状态码判断，注意res返回的并不一定都是status，比如小程序就是statusCode
       if (res.status == 200) {

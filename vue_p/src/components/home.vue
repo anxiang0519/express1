@@ -4,36 +4,28 @@
      <!--  <el-switch v-model="isCollapse" active-color="#13ce66" inactive-color="#ff4949">
       </el-switch> -->
       <div class="menu_btn" @click="changeMenu()"></div>
-      <el-menu default-active="1-4-1" class="el-menu-left" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-        <el-menu-item index="2" to="/home/index">
+      <el-menu router default-active="1-4-1" class="el-menu-left" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+         <el-menu-item index="/home/index">
           <i class="el-icon-menu"></i>
-          <span slot="title">首页</span>
+          <span slot="title">首頁</span>
         </el-menu-item>
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span slot="title">人员</span>
-          </template>
-          <el-menu-item-group>
-            <span slot="title">工具</span>
-            <el-menu-item index="1-1">
-                <router-link to="/home/user">user</router-link>
-            </el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <span slot="title">选项4</span>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-menu-item index="4">
+        <el-menu-item index="/home/product">
+          <i class="el-icon-document"></i>
+          <span slot="title">商品</span>
+        </el-menu-item>
+        <el-menu-item index="3">
           <i class="el-icon-setting"></i>
-          <span slot="title">设置</span>
+          <span slot="title">购物车</span>
         </el-menu-item>
-      </el-menu>
+         <el-menu-item index="4">
+          <i class="el-icon-setting"></i>
+          <span slot="title">订单</span>
+        </el-menu-item>
+         <el-menu-item index="5">
+          <i class="el-icon-setting"></i>
+          <span slot="title">用户</span>
+        </el-menu-item>
+      </el-menu>    
     </el-aside>
     
     <el-container>
@@ -102,6 +94,7 @@ export default {
     }
   },
   mounted(){
+    return;
      /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
     var loginuser = getCookie('username')
     if(!loginuser){
@@ -116,7 +109,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.el-menu-left(.el-menu--collapse) {
+.el-menu-left:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
 }

@@ -52,6 +52,8 @@ export default {
   },
   methods:{
     login(){
+      this.$router.push('/home');
+      return;
       var _this = this;
       http({
         //这里是你自己的请求方式、url和data参数

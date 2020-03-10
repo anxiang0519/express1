@@ -21,12 +21,13 @@ var pool = mysql.createPool(poolextend({}, mysqlconfig));
 var product = {
     add: function(req, res, next) {
         var param = req.body;
-        if (param.age == null || param.name == null||param.phone == null) {
-            json(res, undefined);
-            return;
-        }
+        // if (param.age == null || param.name == null||param.phone == null) {
+        //     json(res, undefined);
+        //     return;
+        // }
+        console.log(param);
         pool.getConnection(function(err, connection) {
-            connection.query(sql.insert, [param.id, param.name, param.age,param.phone], function(err, result) {
+            connection.query(sql.insert,[param.productname,param.description,param.price,param.time,param.express,param.type], function(err, result) {
                 if (result) {
                     result = 'add'
                 }
@@ -58,7 +59,7 @@ var product = {
             return;
         }
         pool.getConnection(function(err, connection) {
-            connection.query(sql.update, [param.name, param.age,param.phone, +param.id], function(err, result) {
+            connection.query(sql.update, [param.productname, param.age,param.phone, +param.id], function(err, result) {
                 if (result.affectedRows > 0) {
                     result = 'update'
                 } else {

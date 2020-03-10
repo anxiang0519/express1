@@ -2,127 +2,175 @@
   <div>
     <el-button type="primary" @click="addUser()">新增</el-button>
     <el-table 
-    :data="users.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" 
-    style="width: 100%" stripe :default-sort = "{prop: 'name', order: 'descending'}"> 
-      <el-table-column type="index">
-      </el-table-column>
+    height="500" border :data="productList.filter(data => !search || data.productname.toLowerCase().includes(search.toLowerCase()))" 
+    style="width: 100%" stripe :default-sort = "{prop: 'productname', order: 'descending'}"> 
+    <el-table-column type="index">
+    </el-table-column>
 
-      <el-table-column label="姓名" prop="name" sortable>
-      </el-table-column>
+    <el-table-column label="商品名称" prop="productname" sortable>
+    </el-table-column>
 
-      <el-table-column label="年龄" prop="age" sortable>
-      </el-table-column>
+    <el-table-column label="描述" prop="description" sortable>
+    </el-table-column>
 
-      <el-table-column label="手机" prop="phone">
-      </el-table-column>
+    <el-table-column label="价格" prop="price">
+    </el-table-column>
 
-      <el-table-column align="center">
-        <template slot="header" slot-scope="scope">
-          <el-input v-model="search" size="mini" placeholder="名字搜索"/>
-        </template> 
-        <template slot-scope="scope">
-          <el-button size="mini" @click="query(scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="deleterow(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-table-column label="库存" prop="num1">
+    </el-table-column>
 
-    <el-dialog :title="dialogInfo.title" :visible.sync="dialogInfo.isshow">
-      <el-form :model="dialogInfo.userObj">
-        <el-form-item label="姓名">
-          <el-input v-model="dialogInfo.userObj.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="年龄">
-          <el-input v-model="dialogInfo.userObj.age" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-          <el-input v-model="dialogInfo.userObj.phone" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="canvel()">取 消</el-button>
-        <el-button type="primary" @click="save()">确 定</el-button>
-      </div>
-    </el-dialog>
-  </div>
+    <el-table-column label="上架时间" prop="time">
+    </el-table-column>
+
+    <el-table-column label="图片" prop="preimgurl">
+    </el-table-column>
+
+    <el-table-column align="center">
+      <template slot="header" slot-scope="scope">
+        <el-input v-model="search" size="mini" placeholder="名字搜索"/>
+      </template> 
+      <template slot-scope="scope">
+        <el-button size="mini" @click="query(scope.row)">编辑</el-button>
+        <el-button size="mini" type="danger" @click="deleterow(scope.row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <el-dialog :title="dialogInfo.title" :visible.sync="dialogInfo.isshow" width="500px">
+    <el-form ref="form" :model="productObj" label-width="80px" size="mini">
+      <el-form-item label="商品名称">
+        <el-input v-model="productObj.productname"></el-input>
+      </el-form-item>
+      <el-form-item label="商品价格">
+        <el-input v-model="productObj.price"></el-input>
+      </el-form-item>
+      <el-form-item label="库存">
+        <el-input v-model="productObj.num1"></el-input>
+      </el-form-item>
+    </el-form-item>
+    <el-form-item label="上架时间">
+      <el-date-picker type="datetime" placeholder="选择上架时间" v-model="productObj.time"></el-date-picker>
+    </el-form-item>
+    <el-form-item label="商品描述">
+      <el-input type="textarea" v-model="productObj.description"></el-input>
+    </el-form-item>
+    <el-form-item label="是否包邮">
+      <el-radio-group v-model="productObj.express">
+        <el-radio label="1" v-model="productObj.express">包邮</el-radio>
+        <el-radio label="0" v-model="productObj.express">不包邮</el-radio>
+      </el-radio-group>
+    </el-form-item>
+
+    <el-form-item label="商品图片" prop="imgUrl">
+      <el-upload
+      class="upload-demo"
+      action="http://localhost:3000/upload"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      :before-remove="beforeRemove"
+      multiple
+      :limit="3"
+      :on-exceed="handleExceed">
+      <el-button size="small" type="primary">点击上传</el-button>
+      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+    </el-upload>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="save">立即创建</el-button>
+    <el-button @click="cancelDialog">取消</el-button>
+  </el-form-item>
+</el-form>
+</el-dialog>
+</div>
 </template>
 
 <script>
-import http from '@/http'
-import { setCookie,getCookie,delCookie } from '@/cookie'
-export default {
-  name: 'product',
-  data(){
-    return {
-      title:'',
-      users:[],
-      search:'',
-      dialogInfo:{
-        isAdd:false,
-        isshow:false,
-        userObj:{},
-        title:''
+  import http from '@/http'
+  import { setCookie,getCookie,delCookie } from '@/cookie'
+  export default {
+    name: 'product',
+    data(){
+      return {
+        title:'',
+        productList:[],
+        search:'',
+        dialogInfo:{
+          isAdd:false,
+          isshow:false,
+          title:''
+        },
+        productObj: {
+          productname: '',
+          description: '',
+          price: '',
+          type: '',
+          time: '',
+          express:0,
+          type:1,
+          num1:0,
+          fileList:[]
+        }
       }
-    }
-  },
-  methods:{
-    addUser(){
-      this.dialogInfo.isAdd = true
-      this.dialogInfo.title='人员新增'
-      this.dialogInfo.userObj = {}
-      this.dialogInfo.isshow = true;
     },
-    query(row){
-      this.dialogInfo.isAdd = false;
-      this.dialogInfo.title='人员编辑'
-      const {id,name,age,phone} = this.users[this.users.findIndex(item => item.id === row.id)]
-      this.dialogInfo.userObj = {'id':id,'name':name,'age':age,'phone':phone};
-      this.dialogInfo.isshow = true;
-    },
-    deleterow(row){
-      var _this = this;
-      this.$confirm('确认删除？','提示',{
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(()=>{
+    methods:{
+      addUser(){
+        this.dialogInfo.isAdd = true
+        this.dialogInfo.title='商品新增'
+        this.dialogInfo.productObj = {}
+        this.dialogInfo.isshow = true;
+      },
+      query(row){
+        this.dialogInfo.isAdd = false;
+        this.dialogInfo.title='商品编辑'
+        var productInfo = this.productList[this.productList.findIndex(item => item.id === row.id)]
+        this.dialogInfo.productObj = {...productInfo};
+        this.dialogInfo.isshow = true;
+      },
+      deleterow(row){
+        var _this = this;
+        this.$confirm('确认删除？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
          http({
           //这里是你自己的请求方式、url和data参数
           method: 'get',
-          url: 'http://localhost:3000/deleteUser?id='+row.id,
+          url: 'http://localhost:3000/product/delete?id='+row.id,
           data: {}
         }).then(res => {
           if(res.code==200){
-            _this.users.splice(_this.users.findIndex(item => item.id == row.id), 1)
+            _this.productList.splice(_this.productList.findIndex(item => item.id == row.id), 1)
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
           }
         }).catch(err => {
-           this.$message({
-              type: 'info',
-              message: '删除失败'
-            }); 
-        });
-      }).catch(()=>{
          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          }); 
-      })
-     
+          type: 'info',
+          message: '删除失败'
+        }); 
+       });
+      }).catch(()=>{
+       this.$message({
+        type: 'info',
+        message: '已取消删除'
+      }); 
+     })
+
     },
-    save(){
+    save(productObj){
+      console.log(this.productObj);
       if(!this.dialogInfo.isAdd){//edit
         http({
           //这里是你自己的请求方式、url和data参数
           method: 'post',
-          url: 'http://localhost:3000/updateUser',
-          data: {'id':this.dialogInfo.userObj.id,'name':this.dialogInfo.userObj.name,'age':this.dialogInfo.userObj.age,'phone':this.dialogInfo.userObj.phone}
+          url: 'http://localhost:3000/product/update',
+          data: this.productObj
         }).then(res => {
           if(res.code==200){
-            getAllUser(this);
+            getProductList(this);
             this.$message({
               type: 'success',
               message: '保存成功!'
@@ -138,11 +186,11 @@ export default {
         http({
           //这里是你自己的请求方式、url和data参数
           method: 'post',
-          url: 'http://localhost:3000/addUser',
-          data: {'name':this.dialogInfo.userObj.name,'age':this.dialogInfo.userObj.age,'phone':this.dialogInfo.userObj.phone}
+          url: 'http://localhost:3000/product/add',
+          data: this.productObj
         }).then(res => {
           if(res.code==200){
-            getAllUser(this);
+            getProductList(this);
             this.$message({
               type: 'success',
               message: '保存成功!'
@@ -156,28 +204,35 @@ export default {
         });
       }
       this.dialogInfo.isshow = false
+    },
+    cancelDialog:function(){
+      this.dialogInfo.isshow = false;
     }
   },
+  
   mounted(){
+    getProductList(this);
+    return;
     /*页面挂载获取保存的cookie值，渲染到页面上*/
     let uname = getCookie('username')
     this.name = uname
     /*如果cookie不存在，则跳转到登录页*/
     if(uname == ""){
-        this.$router.push('/')
-        return
+      this.$router.push('/')
+      return
     }
-    getAllUser(this);
+    
   }
 }
-function getAllUser(_this){
+function getProductList(_this){
   http({
     //这里是你自己的请求方式、url和data参数
     method: 'get',
-    url: 'http://localhost:3000/queryAll',
+    url: 'http://localhost:3000/product/queryList',
     data: {}
   }).then(function (res) {
-    _this.users = res.data;
+    console.log(res);
+    _this.productList = res.data;
   }).catch(function (err) {
     console.log(err);
   });

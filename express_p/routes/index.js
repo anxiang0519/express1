@@ -1,5 +1,6 @@
 //router/index.js
 var express = require('express');
+var multer  = require('multer')
 var router = express.Router();
 var address = require('../modules/address/handle');
 var banner = require('../modules/banner/handle');
@@ -7,7 +8,6 @@ var log = require('../modules/log/handle');
 var order = require('../modules/order/handle');
 var product = require('../modules/product/handle');
 var shopcar = require('../modules/shopcar/handle');
-
 
 router.post('/address/add', function (req, res, next) {
     address.add(req, res, next);
@@ -103,5 +103,17 @@ router.get('/shopcar/delete', function (req, res, next) {
 });
 router.post('/shopcar/update', function (req, res, next) {
     shopcar.update(req, res, next);
+});
+var upload = multer({ dest: '../uploads/' })
+router.post('/upload',upload.single('file'),function (req, res, next) {
+    let file = req.file;
+    res.json({message: "ok",file:file});
+});
+
+router.get('/loadimg/e461d29d6cc9bae1056c01434980db46',function (req, res, next) {
+    console.log(req);
+    // let file = path.join(__dirname,'../../../uploads/' + '97d53267175a75dd758a84329950fe25');
+    // console.log(file);
+    // res.download(file); 
 });
 module.exports = router;
