@@ -104,7 +104,7 @@ router.get('/shopcar/delete', function (req, res, next) {
 router.post('/shopcar/update', function (req, res, next) {
     shopcar.update(req, res, next);
 });
-var upload = multer({ dest: '../uploads/' })
+var upload = multer({ dest: 'uploads/' })
 router.post('/upload',upload.single('file'),function (req, res, next) {
     let file = req.file;
     res.json({message: "ok",file:file});
