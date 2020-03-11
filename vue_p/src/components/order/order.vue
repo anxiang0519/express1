@@ -2,21 +2,25 @@
   <div>
     <el-tabs type="border-card">
       <el-tab-pane>
-        <span slot="label"><i class="el-icon-date"></i>用戶信息</span>
+        <span slot="label"><i class="el-icon-date"></i>全部订单</span>
         <el-button type="primary" @click="addUser()">新增</el-button>
         <el-table 
-        :data="users.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" 
-        style="width: 100%" stripe :default-sort = "{prop: 'name', order: 'descending'}"> 
+        :data="orderList.filter(data => !search || data.userid.toLowerCase().includes(search.toLowerCase()))" 
+        style="width: 100%" stripe :default-sort = "{prop: 'userid', order: 'descending'}"> 
         <el-table-column type="index">
         </el-table-column>
-
+        <el-table-column label="用户ID" prop="userid" sortable>
+        </el-table-column>
         <el-table-column label="姓名" prop="name" sortable>
         </el-table-column>
-
-        <el-table-column label="年龄" prop="age" sortable>
+        <el-table-column label="商品ID" prop="productid" sortable>
+        </el-table-column>
+        <el-table-column label="商品名称" prop="productname" sortable>
         </el-table-column>
 
-        <el-table-column label="手机" prop="phone">
+        <el-table-column label="数量" prop="num">
+        </el-table-column>
+        <el-table-column label="类型" prop="type">
         </el-table-column>
 
         <el-table-column align="center">
@@ -30,10 +34,9 @@
         </el-table-column>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane>
-      <span slot="label"><i class="el-icon-date"></i>地址信息</span>
-      消息中心
-    </el-tab-pane>
+    <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待付款</span></el-tab-pane>
+    <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待发货</span></el-tab-pane>
+    <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待评价</span></el-tab-pane>
   </el-tabs>
 
 
@@ -61,11 +64,11 @@
   import http from '@/http'
   import { setCookie,getCookie,delCookie } from '@/cookie'
   export default {
-    name: 'usermanager',
+    name: 'order',
     data(){
       return {
         title:'',
-        users:[],
+        orderList:[],
         search:'',
         dialogInfo:{
           isAdd:false,
@@ -85,7 +88,7 @@
       query(row){
         this.dialogInfo.isAdd = false;
         this.dialogInfo.title='人员编辑'
-        const {id,name,age,phone} = this.users[this.users.findIndex(item => item.id === row.id)]
+        const {id,name,age,phone} = this.productCars[this.productCars.findIndex(item => item.id === row.id)]
         this.dialogInfo.userObj = {'id':id,'name':name,'age':age,'phone':phone};
         this.dialogInfo.isshow = true;
       },
@@ -103,7 +106,7 @@
           data: {}
         }).then(res => {
           if(res.code==200){
-            _this.users.splice(_this.users.findIndex(item => item.id == row.id), 1)
+            _this.productCars.splice(_this.productCars.findIndex(item => item.id == row.id), 1)
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -186,11 +189,11 @@ function getAllUser(_this){
   http({
     //这里是你自己的请求方式、url和data参数
     method: 'get',
-    url: 'http://localhost:3000/user/queryAll',
+    url: 'http://localhost:3000/order/queryAll',
     data: {}
   }).then(function (res) {
     console.log(res);
-    _this.users = res.data;
+    _this.orderList = res.data;
   }).catch(function (err) {
     console.log(err);
   });
