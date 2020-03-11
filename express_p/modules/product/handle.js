@@ -91,7 +91,7 @@ var product = {
     queryAll: function(req, res, next) {
         pool.getConnection(function(err, connection) {
             connection.query(sql.queryAll, function(err, result) {
-                if (result != '') {
+                if (Object.prototype.toString.call(result)== '[object Array]') {
                     var _result = result;
                     result = {
                         result: 'selectall',

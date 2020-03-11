@@ -18,15 +18,15 @@ var sql = require('./sql');
 var json = require('../json');
 // 使用连接池，提升性能
 var pool = mysql.createPool(poolextend({}, mysqlconfig));
-var address = {
+var user = {
     add: function(req, res, next) {
         var param = req.body;
-        if (param.age == null || param.name == null||param.phone == null) {
-            json(res, undefined);
-            return;
-        }
+        // if (param.age == null || param.name == null||param.phone == null) {
+        //     json(res, undefined);
+        //     return;
+        // }
         pool.getConnection(function(err, connection) {
-            connection.query(sql.insert, [param.id, param.name, param.age,param.phone], function(err, result) {
+            connection.query(sql.insert, [param.nickName,param.avatarUrl,param.city,param.country,param.gender,param.language,param.province,param.logintime], function(err, result) {
                 if (result) {
                     result = 'add'
                 }
@@ -53,12 +53,12 @@ var address = {
     },
     update: function(req, res, next) {
         var param = req.body;
-        if (param.name == null || param.age == null || param.id == null||param.phone == null) {
-            json(res, undefined);
-            return;
-        }
+        // if (param.name == null || param.age == null || param.id == null||param.phone == null) {
+        //     json(res, undefined);
+        //     return;
+        // }
         pool.getConnection(function(err, connection) {
-            connection.query(sql.update, [param.name, param.age,param.phone, +param.id], function(err, result) {
+            connection.query(sql.update, [param.wxname, param.wxid,param.logintime, +param.id], function(err, result) {
                 if (result.affectedRows > 0) {
                     result = 'update'
                 } else {
@@ -90,7 +90,7 @@ var address = {
     queryAll: function(req, res, next) {
         pool.getConnection(function(err, connection) {
             connection.query(sql.queryAll, function(err, result) {
-                if (result != '') {
+                if (Object.prototype.toString.call(result)== '[object Array]') {
                     var _result = result;
                     result = {
                         result: 'selectall',
@@ -105,4 +105,4 @@ var address = {
         });
     }
 };
-module.exports = address;
+module.exports = user;
