@@ -4,9 +4,9 @@
       <el-page-header @back="goBack" content="商品詳情"></el-page-header>
     </el-header>
     <el-main>
-      <el-button type="primary" @click="addUser()">新增</el-button>
+      <!-- <el-button type="primary" @click="addUser()">新增</el-button> -->
       <div></div>
-      <el-table border :data="productList.filter(data => !search || data.productname.toLowerCase().includes(search.toLowerCase()))" 
+      <el-table height="100%" border :data="productList.filter(data => !search || data.productname.toLowerCase().includes(search.toLowerCase()))" 
       style="width: 100%" stripe :default-sort = "{prop: 'productname', order: 'descending'}"> 
       <el-table-column type="index">
       </el-table-column>
