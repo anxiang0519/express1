@@ -51,7 +51,7 @@
 import http from '@/http'
 import { setCookie,getCookie,delCookie } from '@/cookie'
 export default {
-  name: 'userManager',
+  name: 'usermanager',
   data(){
     return {
       title:'',
@@ -159,6 +159,8 @@ export default {
     }
   },
   mounted(){
+     getAllUser(this);
+    return;
     /*页面挂载获取保存的cookie值，渲染到页面上*/
     let uname = getCookie('username')
     this.name = uname
@@ -167,16 +169,17 @@ export default {
         this.$router.push('/')
         return
     }
-    getAllUser(this);
+   
   }
 }
 function getAllUser(_this){
   http({
     //这里是你自己的请求方式、url和data参数
     method: 'get',
-    url: 'http://localhost:3000/queryAll',
+    url: 'http://localhost:3000/user/queryAll',
     data: {}
   }).then(function (res) {
+    console.log(res);
     _this.users = res.data;
   }).catch(function (err) {
     console.log(err);

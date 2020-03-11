@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import login from '@/components/login'
 import home from '@/components/home'
 import index from '@/components/index'
-import userManage from '@/components/userManage/userManage'
+import usermanage from '@/components/usermanage/usermanage'
 import product from '@/components/product/product'
 
 
@@ -33,9 +33,9 @@ export default new Router({
             component: index
           },
           {
-            path: '/home/userManage',
-            name: 'userManage',
-            component: userManage
+            path: '/home/usermanage',
+            name: 'usermanage',
+            component: usermanage
           },
           {
             path: '/home/product',

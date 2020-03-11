@@ -21,9 +21,13 @@
           <i class="el-icon-setting"></i>
           <span slot="title">订单</span>
         </el-menu-item>
-         <el-menu-item index="5">
+         <el-menu-item index="/home/usermanage">
           <i class="el-icon-setting"></i>
-          <span slot="title">用户</span>
+          <span slot="title">用户管理</span>
+        </el-menu-item>
+         <el-menu-item index="/home/usermanage">
+          <i class="el-icon-setting"></i>
+          <span slot="title">设置</span>
         </el-menu-item>
       </el-menu>    
     </el-aside>

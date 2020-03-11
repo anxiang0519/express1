@@ -8,6 +8,7 @@ var log = require('../modules/log/handle');
 var order = require('../modules/order/handle');
 var product = require('../modules/product/handle');
 var shopcar = require('../modules/shopcar/handle');
+var user = require('../modules/user/handle');
 
 router.post('/address/add', function (req, res, next) {
     address.add(req, res, next);
@@ -104,6 +105,24 @@ router.get('/shopcar/delete', function (req, res, next) {
 router.post('/shopcar/update', function (req, res, next) {
     shopcar.update(req, res, next);
 });
+
+router.post('/user/add', function (req, res, next) {
+    user.add(req, res, next);
+});
+router.get('/user/queryAll', function (req, res, next) {
+    user.queryAll(req, res, next);
+});
+router.get('/user/queryById', function (req, res, next) {
+    user.queryById(req, res, next);
+});
+router.get('/user/delete', function (req, res, next) {
+    user.delete(req, res, next);
+});
+router.post('/user/update', function (req, res, next) {
+    user.update(req, res, next);
+});
+
+
 var upload = multer({ dest: 'uploads/' })
 router.post('/upload',upload.single('file'),function (req, res, next) {
     let file = req.file;
