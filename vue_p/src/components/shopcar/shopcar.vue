@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button type="primary" @click="addUser()">新增</el-button>
     <el-table 
     :data="productCarList.filter(data => !search || data.userid.toLowerCase().includes(search.toLowerCase()))" 
     style="width: 100%" stripe :default-sort = "{prop: 'userid', order: 'descending'}"> 

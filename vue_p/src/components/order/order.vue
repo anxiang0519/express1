@@ -1,11 +1,11 @@
 <template>
   <div style="height:100%;">
     <el-tabs type="border-card" style="height:100%;">
-      <el-tab-pane>
-        <span slot="label"><i class="el-icon-date"></i>全部订单</span>
-        <el-button type="primary" @click="addUser()">新增</el-button>
+
+      <el-tab-pane v-for="(item,index) in tabs" :key="index">
+        <span slot="label"><i class="el-icon-date"></i>{{item.title}}</span>
         <el-table height="100%"
-        :data="orderList.filter(data => !search || data.userid.toLowerCase().includes(search.toLowerCase()))" 
+        :data="item.orders.filter(data => !search || data.userid.toLowerCase().includes(search.toLowerCase()))" 
         style="width: 100%" stripe :default-sort = "{prop: 'userid', order: 'descending'}"> 
         <el-table-column type="index">
         </el-table-column>
@@ -19,6 +19,8 @@
         </el-table-column>
 
         <el-table-column label="数量" prop="num">
+        </el-table-column>
+          <el-table-column label="价格" prop="price">
         </el-table-column>
         <el-table-column label="类型" prop="type">
         </el-table-column>
@@ -34,9 +36,9 @@
         </el-table-column>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待付款</span></el-tab-pane>
+<!--     <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待付款</span></el-tab-pane>
     <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待发货</span></el-tab-pane>
-    <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待评价</span></el-tab-pane>
+    <el-tab-pane><span slot="label"><i class="el-icon-date"></i>待评价</span></el-tab-pane> -->
   </el-tabs>
 
 
@@ -68,7 +70,12 @@
     data(){
       return {
         title:'',
-        orderList:[],
+        tabs:[
+          {title:'全部订单',orders:[]},
+          {title:'待付款',orders:[]},
+          {title:'待发货',orders:[]},
+          {title:'待评价',orders:[]}
+        ],
         search:'',
         dialogInfo:{
           isAdd:false,
@@ -79,121 +86,33 @@
       }
     },
     methods:{
-      addUser(){
-        this.dialogInfo.isAdd = true
-        this.dialogInfo.title='人员新增'
-        this.dialogInfo.userObj = {}
-        this.dialogInfo.isshow = true;
-      },
-      query(row){
-        this.dialogInfo.isAdd = false;
-        this.dialogInfo.title='人员编辑'
-        const {id,name,age,phone} = this.productCars[this.productCars.findIndex(item => item.id === row.id)]
-        this.dialogInfo.userObj = {'id':id,'name':name,'age':age,'phone':phone};
-        this.dialogInfo.isshow = true;
-      },
-      deleterow(row){
-        var _this = this;
-        this.$confirm('确认删除？','提示',{
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(()=>{
-         http({
-          //这里是你自己的请求方式、url和data参数
-          method: 'get',
-          url: 'http://localhost:3000/deleteUser?id='+row.id,
-          data: {}
-        }).then(res => {
-          if(res.code==200){
-            _this.productCars.splice(_this.productCars.findIndex(item => item.id == row.id), 1)
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          }
-        }).catch(err => {
-         this.$message({
-          type: 'info',
-          message: '删除失败'
-        }); 
-       });
-      }).catch(()=>{
-       this.$message({
-        type: 'info',
-        message: '已取消删除'
-      }); 
-     })
-
     },
-    save(){
-      if(!this.dialogInfo.isAdd){//edit
-        http({
-          //这里是你自己的请求方式、url和data参数
-          method: 'post',
-          url: 'http://localhost:3000/updateUser',
-          data: {'id':this.dialogInfo.userObj.id,'name':this.dialogInfo.userObj.name,'age':this.dialogInfo.userObj.age,'phone':this.dialogInfo.userObj.phone}
-        }).then(res => {
-          if(res.code==200){
-            getAllUser(this);
-            this.$message({
-              type: 'success',
-              message: '保存成功!'
-            });
-          }
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '保存失败'
-          }); 
-        });
-      }else{//add
-        http({
-          //这里是你自己的请求方式、url和data参数
-          method: 'post',
-          url: 'http://localhost:3000/addUser',
-          data: {'name':this.dialogInfo.userObj.name,'age':this.dialogInfo.userObj.age,'phone':this.dialogInfo.userObj.phone}
-        }).then(res => {
-          if(res.code==200){
-            getAllUser(this);
-            this.$message({
-              type: 'success',
-              message: '保存成功!'
-            })
-          }
-        }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '保存失败'
-          }); 
-        });
-      }
-      this.dialogInfo.isshow = false
-    }
-  },
   mounted(){
-   getAllUser(this);
-   return;
-   /*页面挂载获取保存的cookie值，渲染到页面上*/
-   let uname = getCookie('username')
-   this.name = uname
-   /*如果cookie不存在，则跳转到登录页*/
-   if(uname == ""){
-    this.$router.push('/')
-    return
-  }
+     getAllUser(this);
+     return;
+     /*页面挂载获取保存的cookie值，渲染到页面上*/
+     let uname = getCookie('username')
+     this.name = uname
+     /*如果cookie不存在，则跳转到登录页*/
+     if(uname == ""){
+      this.$router.push('/')
+      return
+    }
 
-}
+  }
 }
 function getAllUser(_this){
   http({
     //这里是你自己的请求方式、url和data参数
     method: 'get',
-    url: 'http://localhost:3000/order/queryAll',
+    url: 'http://localhost:3000/order/queryAll?type='+1,
     data: {}
   }).then(function (res) {
     console.log(res);
-    _this.orderList = res.data;
+    _this.tabs[0].orders = res.data;
+     _this.tabs[1].orders = res.data;
+      _this.tabs[2].orders = res.data;
+       _this.tabs[3].orders = res.data;
   }).catch(function (err) {
     console.log(err);
   });

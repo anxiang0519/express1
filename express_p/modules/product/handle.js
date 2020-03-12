@@ -5,7 +5,7 @@
     req.params 包含映射到指定的路线“参数”属性的对象,如果有route/user/：name，那么“name”属性可作为req.params.name
     req.body通常用来解析POST请求中的数据
      +req.query.id 可以将id转为整数
- */
+     */
 // 引入mysql
 var mysql = require('mysql');
 // 引入mysql连接配置
@@ -16,8 +16,13 @@ var poolextend = require('../poolextend');
 var sql = require('./sql');
 // 引入json模块
 var json = require('../json');
+
+var token = require('../../config/token')
+
 // 使用连接池，提升性能
 var pool = mysql.createPool(poolextend({}, mysqlconfig));
+
+
 var product = {
     add: function(req, res, next) {
         var param = req.body;
@@ -89,12 +94,14 @@ var product = {
         });
     },
     queryAll: function(req, res, next) {
-        pool.getConnection(function(err, connection) {
+        token.checkToken(req.headers.Authorization).then(res=>{
+           pool.getConnection(function(err, connection) {
             connection.query(sql.queryAll, function(err, result) {
+                console.log(result);
                 if (Object.prototype.toString.call(result)== '[object Array]') {
                     var _result = result;
                     result = {
-                        result: 'selectall',
+                        code: 200,
                         data: _result
                     }
                 } else {
@@ -104,6 +111,13 @@ var product = {
                 connection.release();
             });
         });
-    }
+       }).catch(error=>{
+        var result = {
+            code: '1'
+        }
+        json(res, result);
+    })
+       
+   }
 };
 module.exports = product;

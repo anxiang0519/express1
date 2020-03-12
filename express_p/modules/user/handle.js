@@ -16,6 +16,8 @@ var poolextend = require('../poolextend');
 var sql = require('./sql');
 // 引入json模块
 var json = require('../json');
+
+var token = require('../../config/token')
 // 使用连接池，提升性能
 var pool = mysql.createPool(poolextend({}, mysqlconfig));
 var user = {
@@ -28,7 +30,11 @@ var user = {
         pool.getConnection(function(err, connection) {
             connection.query(sql.insert, [param.nickName,param.avatarUrl,param.city,param.country,param.gender,param.language,param.province,param.logintime], function(err, result) {
                 if (result) {
-                    result = 'add'
+                   var _result = result;
+                    result = {
+                        code: 200 ,
+                        data: _result
+                    }
                 }
                 // 以json形式，把操作结果返回给前台页面
                 json(res, result);
@@ -42,7 +48,11 @@ var user = {
             var id = +req.query.id;
             connection.query(sql.delete, id, function(err, result) {
                 if (result.affectedRows > 0) {
-                    result = 'delete';
+                    var _result = result;
+                    result = {
+                        code: 200 ,
+                        data: _result
+                    }
                 } else {
                     result = undefined;
                 }
@@ -60,7 +70,11 @@ var user = {
         pool.getConnection(function(err, connection) {
             connection.query(sql.update, [param.wxname, param.wxid,param.logintime, +param.id], function(err, result) {
                 if (result.affectedRows > 0) {
-                    result = 'update'
+                    var _result = result;
+                    result = {
+                        code: 200 ,
+                        data: _result
+                    }
                 } else {
                     result = undefined;
                 }
@@ -76,7 +90,7 @@ var user = {
                 if (result != '') {
                     var _result = result;
                     result = {
-                        result: 'select',
+                        code: 200 ,
                         data: _result
                     }
                 } else {
@@ -93,8 +107,30 @@ var user = {
                 if (Object.prototype.toString.call(result)== '[object Array]') {
                     var _result = result;
                     result = {
-                        result: 'selectall',
+                        code: 200 ,
                         data: _result
+                    }
+                } else {
+                    result = undefined;
+                }
+                json(res, result);
+                connection.release();
+            });
+        });
+    },
+    login: function(req, res, next) {
+        var username = req.query.username;
+        var password = req.query.password;
+        pool.getConnection(function(err, connection) {
+            connection.query(sql.login,[username,password], function(err, result) {
+                if (Object.prototype.toString.call(result)== '[object Array]') {
+                    let tokenstr = token.createToken({username:username});
+                    console.log(tokenstr);
+                    var _result = result;
+                    result = {
+                        code: 200,
+                        data: _result,
+                        token:tokenstr
                     }
                 } else {
                     result = undefined;

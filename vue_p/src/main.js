@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import store from './store'
 import router from './router'
 import axios from 'axios'
 import ElementUI from 'element-ui'
@@ -12,12 +13,13 @@ Vue.use(ElementUI)
 
 
 /* eslint-disable no-new */
-new Vue({
+let myVue = new Vue({
 	el: '#app',
 	data:{
 		title:''
 	},
 	router,
+	store,
 	components: { App },
 	template: '<App/>'
 })

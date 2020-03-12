@@ -206,7 +206,7 @@ function getAllUser(_this) {
   http({
     //这里是你自己的请求方式、url和data参数
     method: "get",
-    url: "http://localhost:3000/user/queryAll",
+    url: "http://localhost:3000/userinfo/queryAll",
     data: {}
   })
     .then(function(res) {

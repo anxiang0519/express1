@@ -38,6 +38,7 @@
 <script>
 import {setCookie,getCookie} from '@/cookie'
 import http from '@/http'
+import {mapMutations} from 'vuex'
 import login_back from '@/assets/login_back.jpg'
 export default {
   name: 'login',
@@ -51,44 +52,49 @@ export default {
     }
   },
   methods:{
+    ...mapMutations(['changeLogin']),
     login(){
-      this.$router.push('/home');
-      return;
+      // this.$router.push('/home');
+      // return;
       var _this = this;
       http({
         //这里是你自己的请求方式、url和data参数
         method: 'post',
-        url: 'http://localhost:3000/login',
+        url: 'http://localhost:3000/user/login',
         data: {'username':_this.username,'password':_this.password}
       }).then(res => {
+        console.log(res);
         if(res.code==200){
           this.$message({
             type: 'success',
-            message: '登录成功!'
+            message: '登录成功1!'
           });
-          setCookie('username',_this.username,1000*60)
-          setTimeout(function(){
-              this.$router.push('/home')
-          }.bind(this),1000)
+          // setCookie('username',_this.username,1000*60)
+          _this.changeLogin({token:res.token});
+          this.$router.push('/home')
+          // setTimeout(function(){
+              
+          // }.bind(this),1000)
         }else{
           this.$message({
             type: 'info',
-            message: '登录失败!'
+            message: '登录失败1!'
           });
         }
       }).catch(err => {
+        console.log('error');
         this.$message({
           type: 'info',
-          message: '登录失败'
+          message: '登录失败2'
         }); 
       });
     }
   },
   mounted(){
      /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
-    if(getCookie('username')){
-        this.$router.push('/')
-    }
+    // if(getCookie('username')){
+    //     this.$router.push('/')
+    // }
   }
 }
 </script>

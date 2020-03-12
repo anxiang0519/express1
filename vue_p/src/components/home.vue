@@ -25,7 +25,7 @@
           <i class="el-icon-setting"></i>
           <span slot="title">用户管理</span>
         </el-menu-item>
-         <el-menu-item index="/home/usermanage">
+         <el-menu-item index="/home/setting">
           <i class="el-icon-setting"></i>
           <span slot="title">设置</span>
         </el-menu-item>

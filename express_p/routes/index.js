@@ -8,6 +8,7 @@ var log = require('../modules/log/handle');
 var order = require('../modules/order/handle');
 var product = require('../modules/product/handle');
 var shopcar = require('../modules/shopcar/handle');
+var userinfo = require('../modules/userinfo/handle');
 var user = require('../modules/user/handle');
 
 router.post('/address/add', function (req, res, next) {
@@ -106,6 +107,22 @@ router.post('/shopcar/update', function (req, res, next) {
     shopcar.update(req, res, next);
 });
 
+router.post('/userinfo/add', function (req, res, next) {
+    userinfo.add(req, res, next);
+});
+router.get('/userinfo/queryAll', function (req, res, next) {
+    userinfo.queryAll(req, res, next);
+});
+router.get('/userinfo/queryById', function (req, res, next) {
+    userinfo.queryById(req, res, next);
+});
+router.get('/userinfo/delete', function (req, res, next) {
+    userinfo.delete(req, res, next);
+});
+router.post('/userinfo/update', function (req, res, next) {
+    userinfo.update(req, res, next);
+});
+
 router.post('/user/add', function (req, res, next) {
     user.add(req, res, next);
 });
@@ -120,6 +137,14 @@ router.get('/user/delete', function (req, res, next) {
 });
 router.post('/user/update', function (req, res, next) {
     user.update(req, res, next);
+});
+router.post('/user/login', function (req, res, next) {
+    user.login(req, res, next);
+    // checkToken(req.headers.Authorization).then(res=>{
+    //     user.login(req, res, next);
+    // }).catch(error=>{
+    //     res.json({msg:"非法登錄"})
+    // })
 });
 
 
