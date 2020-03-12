@@ -1,6 +1,6 @@
 //json.js
 //封装接送模块
-var json = function(res, result) {
+var json = function (res, result) {
     console.log(result);
     if (typeof result === 'undefined') {
         res.json({
@@ -8,11 +8,11 @@ var json = function(res, result) {
             msg: '操作失败'
         });
     } else if (result.code === 200) {
-        var resobj = {code:200,msg:"操作成功"}
-        if(result.data){
+        var resobj = { code: 200, msg: "操作成功" }
+        if (result.data) {
             resobj['data'] = result.data;
         }
-        if(result.token){
+        if (result.token) {
             resobj['token'] = result.token;
         }
         res.json(resobj);

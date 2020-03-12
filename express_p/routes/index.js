@@ -2,14 +2,14 @@
 var express = require('express');
 var multer  = require('multer')
 var router = express.Router();
-var address = require('../modules/address/handle');
-var banner = require('../modules/banner/handle');
-var log = require('../modules/log/handle');
-var order = require('../modules/order/handle');
-var product = require('../modules/product/handle');
-var shopcar = require('../modules/shopcar/handle');
-var userinfo = require('../modules/userinfo/handle');
-var user = require('../modules/user/handle');
+var address = require('../modules/address/addressController');
+var banner = require('../modules/banner/bannerController');
+var log = require('../modules/log/logController');
+var order = require('../modules/order/orderController');
+var product = require('../modules/product/productController');
+var shopcar = require('../modules/shopcar/shopcarController');
+var userinfo = require('../modules/userinfo/userinfoController');
+var user = require('../modules/user/userController');
 
 router.post('/address/add', function (req, res, next) {
     address.add(req, res, next);

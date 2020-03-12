@@ -3,7 +3,7 @@
 var mysql = {
     host: '127.0.0.1',
     user: 'root',
-    password: '111111',
+    password: '1992519ax',
     database: 'product',
     port: 3306
 };

@@ -5,9 +5,17 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-var router = require('./routes/index');
+var address = require('./routes/address');
+var banner = require('./routes/banner');
+var file = require('./routes/file');
+var log = require('./routes/log');
+var order = require('./routes/order');
+var product = require('./routes/product');
+var shopcar = require('./routes/shopcar');
+var user = require('./routes/user');
+var userinfo = require('./routes/userinfo');
 var cors = require('cors');
-
+console.log(product);
 var app = express();
 app.use(cors({
     // origin:['*'],  //指定接收的地址
@@ -24,7 +32,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', router);
+app.use('/address', address);
+app.use('/banner', banner);
+app.use('/file', file);
+app.use('/log', log);
+app.use('/order', order);
+app.use('/product', product);
+app.use('/shopcar', shopcar);
+app.use('/user', user);
+app.use('/userinfo', userinfo);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
