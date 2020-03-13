@@ -1,101 +1,135 @@
 <template>
   <div style="height:100%;">
-    <el-tabs type="border-card" style="height:100%;">
-      <el-tab-pane>
+    <el-tabs type="border-card" style="height:100%;" @tab-click="tabclick">
+      <el-tab-pane style="height:100%;">
         <span slot="label">
-          <i class="el-icon-date"></i>用戶信息
+          <i class="el-icon-date"></i>微信用戶信息
         </span>
         <!-- <el-button type="primary" @click="addUser()">新增</el-button> -->
         <el-table
-          height="100%"
-          :data="users"
-          style="width: 100%"
-          stripe
-          :default-sort="{prop: 'nickname', order: 'descending'}"
+        height="100%"
+        :data="wxUserList"
+        style="width: 100%"
+        stripe
+        :default-sort="{prop: 'nickname', order: 'descending'}"
         >
-          <el-table-column type="index"></el-table-column>
+        <el-table-column type="index"></el-table-column>
+        <!-- <el-table-column label="avatarurl" prop="avatarurl" sortable></el-table-column> -->
+        <el-table-column label="rouxiang">
+          <template slot-scope="scope">
+            <el-avatar shape="square" :size="35" :src="scope.row.avatarurl"></el-avatar>
+          </template>
+        </el-table-column>
+        <el-table-column label="nickname" prop="nickname" sortable></el-table-column>
+        <el-table-column label="city" prop="city" sortable></el-table-column>
+        <el-table-column label="country" prop="country" sortable></el-table-column>
+        <el-table-column label="gender" prop="gender" sortable></el-table-column>
+        <el-table-column label="language" prop="language" sortable></el-table-column>
+        <el-table-column label="province" prop="province" sortable></el-table-column>
+        <el-table-column label="logintime" prop="logintime" sortable></el-table-column>
+      </el-table>
+    </el-tab-pane>
+    <el-tab-pane>
+      <span slot="label">
+        <i class="el-icon-date"></i>地址信息
+      </span>
+      <el-table
+      height="100%"
+      :data="addressList"
+      style="width: 100%"
+      stripe
+      :default-sort="{prop: 'nickname', order: 'descending'}"
+      >
+      <el-table-column type="index"></el-table-column>
+      <el-table-column label="name" prop="name" sortable></el-table-column>
+      <el-table-column label="phone" prop="phone" sortable></el-table-column>
+      <el-table-column label="areaName" prop="areaName" sortable></el-table-column>
+      <el-table-column label="location" prop="location" sortable></el-table-column>
+    </el-table>
+  </el-tab-pane>
+  <el-tab-pane>
+    <span slot="label">
+      <i class="el-icon-date"></i>系统用户信息
+    </span>
+    <el-table
+    height="100%"
+    :data="sysUserList"
+    style="width: 100%"
+    stripe
+    :default-sort="{prop: 'nickname', order: 'descending'}"
+    >
+    <el-table-column type="index"></el-table-column>
+    <el-table-column label="username" prop="username" sortable></el-table-column>
+    <el-table-column label="password" prop="password" sortable></el-table-column>
+    <el-table-column label="lasttime" prop="lasttime" sortable></el-table-column>
+    <el-table-column label="type" prop="type" sortable></el-table-column>
+  </el-table>
+</el-tab-pane>
+</el-tabs>
 
-          <el-table-column label="nickname" prop="nickname" sortable></el-table-column>
-
-          <el-table-column label="avatarurl" prop="avatarurl" sortable></el-table-column>
-          <el-table-column label="city" prop="city" sortable></el-table-column>
-
-          <el-table-column label="country" prop="country" sortable></el-table-column>
-          <el-table-column label="gender" prop="gender" sortable></el-table-column>
-          <el-table-column label="language" prop="language" sortable></el-table-column>
-          <el-table-column label="province" prop="province" sortable></el-table-column>
-          <el-table-column label="logintime" prop="logintime" sortable></el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane>
-        <span slot="label">
-          <i class="el-icon-date"></i>地址信息
-        </span>
-        消息中心
-      </el-tab-pane>
-    </el-tabs>
-
-    <el-dialog :title="dialogInfo.title" :visible.sync="dialogInfo.isshow">
-      <el-form :model="dialogInfo.userObj">
-        <el-form-item label="姓名">
-          <el-input v-model="dialogInfo.userObj.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="年龄">
-          <el-input v-model="dialogInfo.userObj.age" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-          <el-input v-model="dialogInfo.userObj.phone" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="canvel()">取 消</el-button>
-        <el-button type="primary" @click="save()">确 定</el-button>
-      </div>
-    </el-dialog>
+<el-dialog :title="dialogInfo.title" :visible.sync="dialogInfo.isshow">
+  <el-form :model="dialogInfo.userObj">
+    <el-form-item label="姓名">
+      <el-input v-model="dialogInfo.userObj.name" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="年龄">
+      <el-input v-model="dialogInfo.userObj.age" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="电话">
+      <el-input v-model="dialogInfo.userObj.phone" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="canvel()">取 消</el-button>
+    <el-button type="primary" @click="save()">确 定</el-button>
   </div>
+</el-dialog>
+</div>
 </template>
 
 <script>
-import http from "@/http";
-import { setCookie, getCookie, delCookie } from "@/cookie";
-export default {
-  name: "usermanager",
-  data() {
-    return {
-      title: "",
-      users: [],
-      search: "",
-      dialogInfo: {
-        isAdd: false,
-        isshow: false,
-        userObj: {},
-        title: ""
-      }
-    };
-  },
-  methods: {
-    addUser() {
-      this.dialogInfo.isAdd = true;
-      this.dialogInfo.title = "人员新增";
-      this.dialogInfo.userObj = {};
-      this.dialogInfo.isshow = true;
+  import http from "@/http";
+  import { setCookie, getCookie, delCookie } from "@/cookie";
+  export default {
+    name: "usermanager",
+    data() {
+      return {
+        title: "",
+        wxUserList: [],
+        addressList:[],
+        sysUserList:[],
+        search: "",
+        dialogInfo: {
+          isAdd: false,
+          isshow: false,
+          userObj: {},
+          title: ""
+        }
+      };
     },
-    query(row) {
-      this.dialogInfo.isAdd = false;
-      this.dialogInfo.title = "人员编辑";
-      const { id, name, age, phone } = this.users[
+    methods: {
+      addUser() {
+        this.dialogInfo.isAdd = true;
+        this.dialogInfo.title = "人员新增";
+        this.dialogInfo.userObj = {};
+        this.dialogInfo.isshow = true;
+      },
+      query(row) {
+        this.dialogInfo.isAdd = false;
+        this.dialogInfo.title = "人员编辑";
+        const { id, name, age, phone } = this.users[
         this.users.findIndex(item => item.id === row.id)
-      ];
-      this.dialogInfo.userObj = { id: id, name: name, age: age, phone: phone };
-      this.dialogInfo.isshow = true;
-    },
-    deleterow(row) {
-      var _this = this;
-      this.$confirm("确认删除？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
+        ];
+        this.dialogInfo.userObj = { id: id, name: name, age: age, phone: phone };
+        this.dialogInfo.isshow = true;
+      },
+      deleterow(row) {
+        var _this = this;
+        this.$confirm("确认删除？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
         .then(() => {
           http({
             //这里是你自己的请求方式、url和data参数
@@ -103,24 +137,24 @@ export default {
             url: "http://localhost:3000/deleteUser?id=" + row.id,
             data: {}
           })
-            .then(res => {
-              if (res.code == 200) {
-                _this.users.splice(
-                  _this.users.findIndex(item => item.id == row.id),
-                  1
+          .then(res => {
+            if (res.code == 200) {
+              _this.users.splice(
+                _this.users.findIndex(item => item.id == row.id),
+                1
                 );
-                this.$message({
-                  type: "success",
-                  message: "删除成功!"
-                });
-              }
-            })
-            .catch(err => {
               this.$message({
-                type: "info",
-                message: "删除失败"
+                type: "success",
+                message: "删除成功!"
               });
+            }
+          })
+          .catch(err => {
+            this.$message({
+              type: "info",
+              message: "删除失败"
             });
+          });
         })
         .catch(() => {
           this.$message({
@@ -128,9 +162,9 @@ export default {
             message: "已取消删除"
           });
         });
-    },
-    save() {
-      if (!this.dialogInfo.isAdd) {
+      },
+      save() {
+        if (!this.dialogInfo.isAdd) {
         //edit
         http({
           //这里是你自己的请求方式、url和data参数
@@ -143,21 +177,21 @@ export default {
             phone: this.dialogInfo.userObj.phone
           }
         })
-          .then(res => {
-            if (res.code == 200) {
-              getAllUser(this);
-              this.$message({
-                type: "success",
-                message: "保存成功!"
-              });
-            }
-          })
-          .catch(err => {
+        .then(res => {
+          if (res.code == 200) {
+            getData(this);
             this.$message({
-              type: "info",
-              message: "保存失败"
+              type: "success",
+              message: "保存成功!"
             });
+          }
+        })
+        .catch(err => {
+          this.$message({
+            type: "info",
+            message: "保存失败"
           });
+        });
       } else {
         //add
         http({
@@ -170,27 +204,41 @@ export default {
             phone: this.dialogInfo.userObj.phone
           }
         })
-          .then(res => {
-            if (res.code == 200) {
-              getAllUser(this);
-              this.$message({
-                type: "success",
-                message: "保存成功!"
-              });
-            }
-          })
-          .catch(err => {
+        .then(res => {
+          if (res.code == 200) {
+            getAllUser(this);
             this.$message({
-              type: "info",
-              message: "保存失败"
+              type: "success",
+              message: "保存成功!"
             });
+          }
+        })
+        .catch(err => {
+          this.$message({
+            type: "info",
+            message: "保存失败"
           });
+        });
       }
       this.dialogInfo.isshow = false;
+    },
+    tabclick(tab){
+      var tabIndex = tab._data.index;
+      switch (parseInt(tabIndex)) {
+        case 0:
+        getData1(this);
+        break;
+        case 1:
+        getData2(this);
+        break;
+        case 2:
+        getData3(this);
+        break;
+      }
     }
   },
   mounted() {
-    getAllUser(this);
+    getData1(this);
     return;
     /*页面挂载获取保存的cookie值，渲染到页面上*/
     let uname = getCookie("username");
@@ -202,20 +250,44 @@ export default {
     }
   }
 };
-function getAllUser(_this) {
+function getData1(_this){//小程序用户信息
   http({
     //这里是你自己的请求方式、url和data参数
     method: "get",
     url: "http://localhost:3000/userinfo/queryAll",
     data: {}
+  }).then(function(res) {
+    _this.wxUserList = res.data;
   })
-    .then(function(res) {
-      console.log(res);
-      _this.users = res.data;
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
+  .catch(function(err) {
+    console.log(err);
+  });
+}
+function getData2(_this){//地址信息
+  http({
+    //这里是你自己的请求方式、url和data参数
+    method: "get",
+    url: "http://localhost:3000/address/queryAll",
+    data: {}
+  }).then(function(res) {
+    _this.addressList = res.data;
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+}
+function getData3(_this) {//系统用户信息
+  http({
+    //这里是你自己的请求方式、url和data参数
+    method: "get",
+    url: "http://localhost:3000/user/queryAll",
+    data: {}
+  }).then(function(res) {
+    _this.sysUserList = res.data;
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 }
 </script>
 

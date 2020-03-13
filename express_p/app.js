@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 解析token获取用户信息
 app.use((req,res,next)=>{
   var token = req.headers['authorization'];
-  console.log(token);
+  // console.log(444,token);
   if(!token){
     return next();
   }else{
@@ -50,6 +50,12 @@ app.use((req,res,next)=>{
     })
   }
 })
+//验证token是否过期并规定哪些路由不用验证
+app.use(expressJwt({
+  secret: 'secretkey'
+}).unless({
+  path: ['/user/login']//除了这个地址，其他的URL都需要验证
+}));
 
 app.use('/address', address);
 app.use('/banner', banner);
@@ -61,14 +67,9 @@ app.use('/shopcar', shopcar);
 app.use('/user', user);
 app.use('/userinfo', userinfo);
 
-//验证token是否过期并规定哪些路由不用验证
-app.use(expressJwt({
-  secret: 'secretkey'
-}).unless({
-  path: ['/user/login']//除了这个地址，其他的URL都需要验证
-}));
 //error handler
 app.use((err,req,res,next)=>{
+  // console.log(555,err);
   if(err.name === 'UnauthorizedError'){
     console.error(req.path + ',无效token');
     res.json({

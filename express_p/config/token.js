@@ -3,8 +3,6 @@ const jwt = require("jsonwebtoken");
 const secret = "secretkey";
 
 function createToken(username) {
-    // payload.rtiem = new Date();
-    // payload.exp = 60 * 60 * 2 *1000;
     return new Promise((resolve,reject)=>{
         // const user = {
         //     "jti": 1,
@@ -21,20 +19,17 @@ function createToken(username) {
 }
 
 function checkToken(token) {
+    // console.log(111,token)
     return new Promise((resolve, reject) => {
         var info = jwt.verify(token, secret, (err, decoded) => {
-            // if (!err) {
-            //     resolve(res)
-            // } else {
-            //     reject("token验证失败");
-            // }
-            console.log(err)
+            // console.log(2222,err)
             if(err){
                 console.log(err.message);
                 return;
             }
             console.log(decoded);
         })
+        // console.log(333,info)
         resolve(info);
     })
 }

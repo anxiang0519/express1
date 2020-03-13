@@ -56,12 +56,11 @@ export default {
     login(){
       // this.$router.push('/home');
       // return;
-      var _this = this;
       http({
         //这里是你自己的请求方式、url和data参数
         method: 'post',
         url: 'http://localhost:3000/user/login',
-        data: {'username':_this.username,'password':_this.password}
+        data: {'username':this.username,'password':this.password}
       }).then(res => {
         console.log(res);
         if(res.code==200){
@@ -70,7 +69,7 @@ export default {
             message: '登录成功1!'
           });
           // setCookie('username',_this.username,1000*60)
-          _this.changeLogin({token:res.token});
+          this.changeLogin({token:'Bearer '+res.token});
           this.$router.push('/home')
           // setTimeout(function(){
               
