@@ -17,8 +17,6 @@ var sql = require('./sql');
 // 引入json模块
 var json = require('../json');
 
-var token = require('../../config/token')
-
 // 使用连接池，提升性能
 var pool = mysql.createPool(poolextend({}, mysqlconfig));
 
@@ -30,15 +28,12 @@ var product = {
         //     json(res, undefined);
         //     return;
         // }
-        console.log(param);
         pool.getConnection(function(err, connection) {
             connection.query(sql.insert,[param.productname,param.description,param.price,param.time,param.express,param.type], function(err, result) {
                 if (result) {
                     result = 'add'
                 }
-                // 以json形式，把操作结果返回给前台页面
                 json(res, result);
-                // 释放连接 
                 connection.release();
             });
         });
@@ -59,10 +54,10 @@ var product = {
     },
     update: function(req, res, next) {
         var param = req.body;
-        if (param.name == null || param.age == null || param.id == null||param.phone == null) {
-            json(res, undefined);
-            return;
-        }
+        // if (param.name == null || param.age == null || param.id == null||param.phone == null) {
+        //     json(res, undefined);
+        //     return;
+        // }
         pool.getConnection(function(err, connection) {
             connection.query(sql.update, [param.productname, param.age,param.phone, +param.id], function(err, result) {
                 if (result.affectedRows > 0) {
@@ -94,11 +89,8 @@ var product = {
         });
     },
     queryAll: function(req, res, next) {
-        var _res = res;
-        token.checkToken(req.headers.authorization).then(res=>{
-           pool.getConnection(function(err, connection) {
+        pool.getConnection(function(err, connection) {
             connection.query(sql.queryAll, function(err, result) {
-                console.log(2222,result);
                 if (Object.prototype.toString.call(result)== '[object Array]') {
                     var _result = result;
                     result = {
@@ -108,17 +100,10 @@ var product = {
                 } else {
                     result = undefined;
                 }
-                json(_res, result);
+                json(res, result);
                 connection.release();
             });
         });
-       }).catch(error=>{
-        var result = {
-            code: '403'
-        }
-        json(_res, result);
-    })
-       
-   }
+    }
 };
 module.exports = product;

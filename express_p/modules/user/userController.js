@@ -5,7 +5,7 @@
     req.params 包含映射到指定的路线“参数”属性的对象,如果有route/user/：name，那么“name”属性可作为req.params.name
     req.body通常用来解析POST请求中的数据
      +req.query.id 可以将id转为整数
- */
+     */
 // 引入mysql
 var mysql = require('mysql');
 // 引入mysql连接配置
@@ -30,12 +30,12 @@ var user = {
         pool.getConnection(function(err, connection) {
             connection.query(sql.insert, [param.nickName,param.avatarUrl,param.city,param.country,param.gender,param.language,param.province,param.logintime], function(err, result) {
                 if (result) {
-                   var _result = result;
-                    result = {
-                        code: 200 ,
-                        data: _result
-                    }
+                 var _result = result;
+                 result = {
+                    code: 200 ,
+                    data: _result
                 }
+            }
                 // 以json形式，把操作结果返回给前台页面
                 json(res, result);
                 // 释放连接 
@@ -123,20 +123,23 @@ var user = {
         var password = req.query.password;
         pool.getConnection(function(err, connection) {
             connection.query(sql.login,[username,password], function(err, result) {
+                console.log(123)
                 if (Object.prototype.toString.call(result)== '[object Array]') {
-                    let tokenstr = token.createToken({user:username});
-                    console.log(tokenstr);
-                    var _result = result;
-                    result = {
-                        code: 200,
-                        data: _result,
-                        token:tokenstr
-                    }
+                    token.createToken(username).then(token=>{
+                        var _result = result;
+                        result = {
+                            code: 200,
+                            data: _result,
+                            token:token
+                        }
+                        json(res, result);
+                        connection.release();
+                    })
                 } else {
                     result = undefined;
+                    json(res, result);
+                    connection.release();
                 }
-                json(res, result);
-                connection.release();
             });
         });
     }
