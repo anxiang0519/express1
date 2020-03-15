@@ -21,12 +21,10 @@ var pool = mysql.createPool(poolextend({}, mysqlconfig));
 var shopcar = {
     add: function(req, res, next) {
         var param = req.body;
-        // if (param.age == null || param.name == null||param.phone == null) {
-        //     json(res, undefined);
-        //     return;
-        // }
+        console.log(param);
         pool.getConnection(function(err, connection) {
-            connection.query(sql.insert, [param.id, param.name, param.age,param.phone], function(err, result) {
+            connection.query(sql.insert,[param.userid,param.productid,param.num,param.updatetime],function(err, result) {
+                console.log(result);
                 if (result) {
                     result = 'add'
                 }
@@ -71,6 +69,7 @@ var shopcar = {
     },
     queryById: function(req, res, next) {
         var id = req.query.id;
+        console.log(userid);
         pool.getConnection(function(err, connection) {
             connection.query(sql.queryById, id, function(err, result) {
                 if (result != '') {
@@ -90,6 +89,24 @@ var shopcar = {
     queryAll: function(req, res, next) {
         pool.getConnection(function(err, connection) {
             connection.query(sql.queryAll, function(err, result) {
+                if (Object.prototype.toString.call(result)== '[object Array]') {
+                    var _result = result;
+                    result = {
+                        result: 'selectall',
+                        data: _result
+                    }
+                } else {
+                    result = undefined;
+                }
+                json(res, result);
+                connection.release();
+            });
+        });
+    },
+    wxqueryAll: function(req, res, next) {
+        var userid = req.query.userid;
+        pool.getConnection(function(err, connection) {
+            connection.query(sql.wxqueryAll,userid, function(err, result) {
                 if (Object.prototype.toString.call(result)== '[object Array]') {
                     var _result = result;
                     result = {

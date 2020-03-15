@@ -11,6 +11,9 @@ router.get('/queryAll', function (req, res, next) {
 router.get('/queryById', function (req, res, next) {
     address.queryById(req, res, next);
 });
+router.get('/queryByUserId', function (req, res, next) {
+    address.queryByUserId(req, res, next);
+});
 router.get('/delete', function (req, res, next) {
     address.delete(req, res, next);
 });

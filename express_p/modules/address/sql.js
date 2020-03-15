@@ -1,10 +1,11 @@
 //sql.js
 // SQL语句封裝
 var address = {
-    insert:'INSERT INTO address(id, name, age ,phone) VALUES(?,?,?,?)',
-    update:'UPDATE address SET name=?, age=?,phone=? WHERE id=?',
+    insert: 'INSERT INTO address(userid, name,phone,areacode,areaname,location,type) VALUES(?,?,?,?,?,?,?)',
+    update: 'UPDATE address SET name = ?,phone = ?,areacode = ?,areaname = ?,location = ?,type = ? WHERE userid=?',
     delete: 'DELETE FROM address WHERE id=?',
     queryById: 'SELECT * FROM address WHERE id=?',
-    queryAll: 'SELECT * FROM address'
+    queryByUserId: 'SELECT * FROM address where userid = ?',
+    queryAll: 'SELECT * FROM address',
 };
 module.exports = address;

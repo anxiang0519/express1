@@ -20,4 +20,7 @@ router.post('/update', function (req, res, next) {
 router.post('/login', function (req, res, next) {
     user.login(req, res, next);
 });
+router.post('/wxlogin', function (req, res, next) {
+    user.wxlogin(req, res, next);
+});
 module.exports = router;

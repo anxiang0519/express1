@@ -8,6 +8,9 @@ router.post('/add', function (req, res, next) {
 router.get('/queryAll', function (req, res, next) {
     shopcar.queryAll(req, res, next);
 });
+router.get('/wxqueryAll', function (req, res, next) {
+    shopcar.wxqueryAll(req, res, next);
+});
 router.get('/queryById', function (req, res, next) {
     shopcar.queryById(req, res, next);
 });

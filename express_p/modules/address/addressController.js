@@ -21,12 +21,8 @@ var pool = mysql.createPool(poolextend({}, mysqlconfig));
 var address = {
     add: function(req, res, next) {
         var param = req.body;
-        if (param.age == null || param.name == null||param.phone == null) {
-            json(res, undefined);
-            return;
-        }
         pool.getConnection(function(err, connection) {
-            connection.query(sql.insert, [param.id, param.name, param.age,param.phone], function(err, result) {
+            connection.query(sql.insert, [param.userid, param.name,param.phone,param.areacode,param.areacame,param.location,1], function(err, result) {
                 if (result) {
                     result = 'add'
                 }
@@ -53,13 +49,11 @@ var address = {
     },
     update: function(req, res, next) {
         var param = req.body;
-        if (param.name == null || param.age == null || param.id == null||param.phone == null) {
-            json(res, undefined);
-            return;
-        }
+        console.log(param.name,param.phone,param.areacode,param.areaname,param.location,1);
         pool.getConnection(function(err, connection) {
-            connection.query(sql.update, [param.name, param.age,param.phone, +param.id], function(err, result) {
-                if (result.affectedRows > 0) {
+            connection.query(sql.update, [param.name,param.phone,param.areacode,param.areaname,param.location,1,+param.userid], function(err, result) {
+                console.log(result);
+                if (result!= '') {
                     result = 'update'
                 } else {
                     result = undefined;
@@ -73,6 +67,25 @@ var address = {
         var id = req.query.id;
         pool.getConnection(function(err, connection) {
             connection.query(sql.queryById, id, function(err, result) {
+                if (result != '') {
+                    var _result = result;
+                    result = {
+                        result: 'select',
+                        data: _result
+                    }
+                } else {
+                    result = undefined;
+                }
+                json(res, result);
+                connection.release();
+            });
+        });
+    },
+    queryByUserId: function(req, res, next) {
+        var userid = req.query.userid;
+        console.log(userid);
+        pool.getConnection(function(err, connection) {
+            connection.query(sql.queryByUserId, userid, function(err, result) {
                 if (result != '') {
                     var _result = result;
                     result = {

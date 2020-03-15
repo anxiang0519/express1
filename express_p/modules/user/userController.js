@@ -142,6 +142,28 @@ var user = {
                 }
             });
         });
+    },
+    wxlogin: function(req, res, next) {
+        pool.getConnection(function(err, connection) {
+            connection.query(sql.wxlogin,[req.body.nickName,req.body.avatarUrl,req.body.city,req.body.country,req.body.gender,req.body.language,req.body.province,req.body.logintime],function(err, result) {
+                if (result) {
+                    token.createToken(req.body.nickname).then(token=>{
+                        var _result = result;
+                        result = {
+                            code: 200,
+                            data: _result,
+                            token:token
+                        }
+                        json(res, result);
+                        connection.release();
+                    })
+                } else {
+                    result = undefined;
+                    json(res, result);
+                    connection.release();
+                }
+            });
+        });
     }
 };
 module.exports = user;
