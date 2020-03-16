@@ -15,7 +15,7 @@
       >
         <el-table
           v-if="editableTabsValue==1"
-          height="500"
+          :height="tableH"
           border
           :data="productList.filter(data => !search || data.productname.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
@@ -42,6 +42,7 @@
               <el-input v-model="search" size="mini" placeholder="名字搜索" />
             </template>
             <template slot-scope="scope">
+              <el-button size="mini" @click="addUser(scope.row)">新增</el-button>
               <!-- <el-button size="mini" @click="query(scope.row)">编辑</el-button> -->
               <el-button size="mini" type="danger" @click="deleterow(scope.row)">删除</el-button>
             </template>
@@ -137,6 +138,7 @@ export default {
   data() {
     return {
       title: "",
+      tableH:600,
       productList: [],
       search: "",
       dialogInfo: {
@@ -164,8 +166,8 @@ export default {
     addUser() {
       this.dialogInfo.isAdd = true;
       this.dialogInfo.title = "商品新增";
-      this.dialogInfo.productObj = {};
       this.dialogInfo.isshow = true;
+      this.productObj = {};
     },
     query(row) {
       this.dialogInfo.isAdd = false;
@@ -173,7 +175,7 @@ export default {
       var productInfo = this.productList[
         this.productList.findIndex(item => item.id === row.id)
       ];
-      this.dialogInfo.productObj = { ...productInfo };
+      this.productObj = { ...productInfo };
       this.dialogInfo.isshow = true;
     },
     deleterow(row) {
@@ -299,16 +301,10 @@ export default {
     }
   },
   mounted() {
+    console.log(this);
+    
     getProductList(this);
-    return;
-    /*页面挂载获取保存的cookie值，渲染到页面上*/
-    let uname = getCookie("username");
-    this.name = uname;
-    /*如果cookie不存在，则跳转到登录页*/
-    if (uname == "") {
-      this.$router.push("/");
-      return;
-    }
+    this.tableH = this.$el.offsetHeight;
   }
 };
 function getProductList(_this) {

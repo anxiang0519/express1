@@ -7,7 +7,7 @@
         </span>
         <!-- <el-button type="primary" @click="addUser()">新增</el-button> -->
         <el-table
-        height="100%"
+        :height="tableH"
         :data="wxUserList"
         style="width: 100%"
         stripe
@@ -26,7 +26,11 @@
         <el-table-column label="gender" prop="gender" sortable></el-table-column>
         <el-table-column label="language" prop="language" sortable></el-table-column>
         <el-table-column label="province" prop="province" sortable></el-table-column>
-        <el-table-column label="logintime" prop="logintime" sortable></el-table-column>
+        <el-table-column label="logintime" sortable>
+          <template slot-scope="scope">
+            <span>{{ getMyDate(scope.row.logintime) }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </el-tab-pane>
     <el-tab-pane>
@@ -34,7 +38,7 @@
         <i class="el-icon-date"></i>地址信息
       </span>
       <el-table
-      height="100%"
+      :height="tableH"
       :data="addressList"
       style="width: 100%"
       stripe
@@ -52,7 +56,7 @@
       <i class="el-icon-date"></i>系统用户信息
     </span>
     <el-table
-    height="100%"
+    :height="tableH"
     :data="sysUserList"
     style="width: 100%"
     stripe
@@ -95,6 +99,7 @@
     data() {
       return {
         title: "",
+        tableH:600,
         wxUserList: [],
         addressList:[],
         sysUserList:[],
@@ -108,11 +113,12 @@
       };
     },
     methods: {
-      addUser() {
-        this.dialogInfo.isAdd = true;
-        this.dialogInfo.title = "人员新增";
-        this.dialogInfo.userObj = {};
-        this.dialogInfo.isshow = true;
+      addUser(data) {
+        console.log(data);
+        // this.dialogInfo.isAdd = true;
+        // this.dialogInfo.title = "人员新增";
+        // this.dialogInfo.userObj = {};
+        // this.dialogInfo.isshow = true;
       },
       query(row) {
         this.dialogInfo.isAdd = false;
@@ -226,69 +232,86 @@
       var tabIndex = tab._data.index;
       switch (parseInt(tabIndex)) {
         case 0:
-        getData1(this);
-        break;
+          this.getData1();
+          break;
         case 1:
-        getData2(this);
-        break;
+          this.getData2();
+          break;
         case 2:
-        getData3(this);
-        break;
+          this.getData3();
+          break;
       }
+    },
+    getMyDate(str) {
+      console.log(str);
+        var oDate = new Date(parseInt(str)),
+        oYear = oDate.getFullYear(),
+        oMonth = oDate.getMonth()+1,
+        oDay = oDate.getDate(),
+        oHour = oDate.getHours(),
+        oMin = oDate.getMinutes(),
+        oSen = oDate.getSeconds(),
+        oTime = oYear +'-'+ this.addZero(oMonth) +'-'+ this.addZero(oDay) +' '+ this.addZero(oHour) +':'+
+    this.addZero(oMin) +':'+this.addZero(oSen);
+        return oTime;
+    },
+    //补零操作
+    addZero(num){
+      if(parseInt(num) < 10){
+        num = '0'+num;
+      }
+      return num;
+    },
+    //小程序用户信息
+    getData1(){
+      var _this = this;
+      http({
+        //这里是你自己的请求方式、url和data参数
+        method: "get",
+        url: "http://localhost:3000/userinfo/queryAll",
+        data: {}
+      }).then(function(res) {
+        _this.wxUserList = res.data;
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    },
+    //地址信息
+    getData2(){
+      var _this = this;
+      http({
+        //这里是你自己的请求方式、url和data参数
+        method: "get",
+        url: "http://localhost:3000/address/queryAll",
+        data: {}
+      }).then(function(res) {
+        _this.addressList = res.data;
+      })
+      .catch(function(err){
+        console.log(err);
+      });
+    },
+    //系统用户信息
+    getData3() {
+      var _this = this;
+      http({
+        //这里是你自己的请求方式、url和data参数
+        method: "get",
+        url: "http://localhost:3000/user/queryAll",
+        data: {}
+      }).then(function(res) {
+        _this.sysUserList = res.data;
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
     }
   },
   mounted() {
-    getData1(this);
-    return;
-    /*页面挂载获取保存的cookie值，渲染到页面上*/
-    let uname = getCookie("username");
-    this.name = uname;
-    /*如果cookie不存在，则跳转到登录页*/
-    if (uname == "") {
-      this.$router.push("/");
-      return;
-    }
+    this.getData1();
   }
 };
-function getData1(_this){//小程序用户信息
-  http({
-    //这里是你自己的请求方式、url和data参数
-    method: "get",
-    url: "http://localhost:3000/userinfo/queryAll",
-    data: {}
-  }).then(function(res) {
-    _this.wxUserList = res.data;
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
-}
-function getData2(_this){//地址信息
-  http({
-    //这里是你自己的请求方式、url和data参数
-    method: "get",
-    url: "http://localhost:3000/address/queryAll",
-    data: {}
-  }).then(function(res) {
-    _this.addressList = res.data;
-  })
-  .catch(function(err){
-    console.log(err);
-  });
-}
-function getData3(_this) {//系统用户信息
-  http({
-    //这里是你自己的请求方式、url和data参数
-    method: "get",
-    url: "http://localhost:3000/user/queryAll",
-    data: {}
-  }).then(function(res) {
-    _this.sysUserList = res.data;
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

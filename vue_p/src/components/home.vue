@@ -33,7 +33,7 @@
   </el-aside>
 
   <el-container>
-    <el-header style="text-align: right; font-size: 12px;border-bottom:1px solid #666;">
+    <el-header style="text-align: right; font-size: 12px;border-bottom:1px solid rgb(238, 241, 246);">
       <el-row style="margin-top:10px;">
         <el-button icon="el-icon-search" circle></el-button>
         <el-badge :value="11" :max="99" class="item">

@@ -86,6 +86,7 @@ var address = {
         console.log(userid);
         pool.getConnection(function(err, connection) {
             connection.query(sql.queryByUserId, userid, function(err, result) {
+                console.log(2222,result)
                 if (result != '') {
                     var _result = result;
                     result = {
