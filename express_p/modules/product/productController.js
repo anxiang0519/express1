@@ -29,7 +29,7 @@ var product = {
         //     return;
         // }
         pool.getConnection(function(err, connection) {
-            connection.query(sql.insert,[param.productname,param.description,param.price,param.time,param.express,param.type], function(err, result) {
+            connection.query(sql.insert,[param.productname,param.description,param.price,param.num1,param.time,param.express,param.type], function(err, result) {
                 if (result) {
                     result = 'add'
                 }
