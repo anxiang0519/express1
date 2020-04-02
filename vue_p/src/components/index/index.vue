@@ -131,7 +131,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="less">
 .indexTop {
   background-color: blue;
   height: 200px;

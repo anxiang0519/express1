@@ -29,7 +29,7 @@
         <i class="el-icon-setting"></i>
         <span slot="title">设置</span>
       </el-menu-item>
-    </el-menu>    
+    </el-menu>
   </el-aside>
 
   <el-container>
@@ -87,7 +87,7 @@ export default {
         this.$router.push('/login')
       }).catch(()=>{
 
-      })            
+      })
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath)
@@ -130,7 +130,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
 .el-menu-left:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;

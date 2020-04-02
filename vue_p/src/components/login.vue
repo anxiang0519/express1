@@ -72,7 +72,7 @@ export default {
           this.changeLogin({token:'Bearer '+res.token});
           this.$router.push('/home')
           // setTimeout(function(){
-              
+
           // }.bind(this),1000)
         }else{
           this.$message({
@@ -85,7 +85,7 @@ export default {
         this.$message({
           type: 'info',
           message: '登录失败2'
-        }); 
+        });
       });
     }
   },
@@ -99,13 +99,14 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
+  @width:400px;
 .login_page{
   height: 100%;
   width: 100%;
 }
 .login_content{
-  width: 400px;
+  width: @width;
   height: 500px;
   /* margin: 0 auto; */
   /* margin-top: 200px; */
@@ -117,22 +118,22 @@ export default {
   margin-top: -200px;
   left: 50%;
   margin-left: -200px;
-}
-.login_user_row{
-  padding-top: 50px;
-}
-.login_psd_row{
-  padding-top: 20px;
-}
-.login_btn_row{
-  padding-top: 20px;
-}
-.login_btn{
-  width: 100%;
-}
-.login_back{
-  position: absolute;
-  width: 100%;
-  height:50%;
+  .login_user_row{
+    padding-top: 50px;
+  }
+  .login_psd_row{
+    padding-top: 20px;
+  }
+  .login_btn_row{
+    padding-top: 20px;
+  }
+  .login_btn{
+    width: 100%;
+  }
+  .login_back{
+    position: absolute;
+    width: 100%;
+    height:50%;
+  }
 }
 </style>

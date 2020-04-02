@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-table 
-    :data="productCarList.filter(data => !search || data.userid.toLowerCase().includes(search.toLowerCase()))" 
-    style="width: 100%" stripe :default-sort = "{prop: 'userid', order: 'descending'}"> 
+    <el-table
+    :data="productCarList.filter(data => !search || data.userid.toLowerCase().includes(search.toLowerCase()))"
+    style="width: 100%" stripe :default-sort = "{prop: 'userid', order: 'descending'}">
       <el-table-column type="index">
       </el-table-column>
        <el-table-column label="用户ID" prop="userid" sortable>
@@ -20,7 +20,7 @@
       <el-table-column align="center">
         <template slot="header" slot-scope="scope">
           <el-input v-model="search" size="mini" placeholder="名字搜索"/>
-        </template> 
+        </template>
         <template slot-scope="scope">
           <el-button size="mini" @click="query(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="deleterow(scope.row)">删除</el-button>
@@ -104,15 +104,15 @@ export default {
            this.$message({
               type: 'info',
               message: '删除失败'
-            }); 
+            });
         });
       }).catch(()=>{
          this.$message({
             type: 'info',
             message: '已取消删除'
-          }); 
+          });
       })
-     
+
     },
     save(){
       if(!this.dialogInfo.isAdd){//edit
@@ -133,7 +133,7 @@ export default {
           this.$message({
             type: 'info',
             message: '保存失败'
-          }); 
+          });
         });
       }else{//add
         http({
@@ -153,7 +153,7 @@ export default {
           this.$message({
             type: 'info',
             message: '保存失败'
-          }); 
+          });
         });
       }
       this.dialogInfo.isshow = false
@@ -170,7 +170,7 @@ export default {
         this.$router.push('/')
         return
     }
-   
+
   }
 }
 function getAllUser(_this){
@@ -189,5 +189,5 @@ function getAllUser(_this){
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
 </style>
